@@ -16,16 +16,16 @@ spring:
         jdbc.batch_size: 20
   datasource:
     # ImMemory
-    url: jdbc:h2:mem:bootjava
-    #    tcp: jdbc:h2:tcp://localhost:9092/mem:bootjava
+    url: jdbc:h2:mem:restaurant-voting
+    #    tcp: jdbc:h2:tcp://localhost:9092/mem:restaurant-voting
     # Absolute path
-    #    url: jdbc:h2:C:/projects/bootjava/db/bootjava
-    #    tcp: jdbc:h2:tcp://localhost:9092/C:/projects/bootjava/db/bootjava
+    #    url: jdbc:h2:C:/projects/restaurant_voting/db/restaurant_voting
+    #    tcp: jdbc:h2:tcp://localhost:9092/C:/projects/restaurant_voting/db/restaurant_voting
     # Relative path form current dir
-    #    url: jdbc:h2:./db/bootjava
+    #    url: jdbc:h2:./db/restaurant_voting
     # Relative path from home
-    #    url: jdbc:h2:~/bootjava
-    #    tcp: jdbc:h2:tcp://localhost:9092/~/bootjava
+    #    url: jdbc:h2:~/restaurant_voting
+    #    tcp: jdbc:h2:tcp://localhost:9092/~/restaurant_voting
     username: sa
     password:
 
@@ -44,7 +44,7 @@ spring:
 logging:
   level:
     root: WARN
-    ru.javaops.bootjava: DEBUG
+    ru.javaops.restaurant_voting: DEBUG
     org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
 
 server.servlet:
