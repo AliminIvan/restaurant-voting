@@ -2,29 +2,33 @@ package ru.javaops.restaurant_voting.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+import ru.javaops.restaurant_voting.util.DateTimeUtil;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "vote", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_ID", "CREATED"}, name = "vote_unique_user_created_idx")})
+@Table(name = "vote", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_ID", "VOTE_DATE"}, name = "vote_unique_user_vote_date_idx")})
 @Getter
 @Setter
-@NoArgsConstructor//(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Vote extends BaseEntity {
 
-    @Column(name = "created", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
+    @Column(name = "vote_date", nullable = false)
     @NotNull
-    private Date created = new Date();
+    @DateTimeFormat(pattern = DateTimeUtil.DATE_PATTERN)
+    private LocalDate voteDate = LocalDate.now();
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "restaurant_id")
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
     public Vote(Integer id, User user, Restaurant restaurant) {

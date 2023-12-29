@@ -4,17 +4,16 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "restaurant")
+@Table(name = "restaurant", uniqueConstraints = {@UniqueConstraint(columnNames = {"ADDRESS", "NAME"}, name = "restaurant_unique_address_name_idx")})
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Restaurant extends NamedEntity {
 
-    @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "menu_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "restaurant")
     private Menu menu;
 
-    @Column(name = "address")
+    @Column(name = "address", nullable = false)
     private String address;
 
     public Restaurant(Integer id, String name, Menu menu, String address) {

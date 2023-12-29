@@ -46,8 +46,8 @@ public class User extends NamedEntity implements HasIdAndEmail {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Date registered = new Date();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @OrderBy("created DESC")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OrderBy("voteDate DESC")
     private List<Vote> votes;
 
     @Enumerated(EnumType.STRING)
@@ -62,7 +62,7 @@ public class User extends NamedEntity implements HasIdAndEmail {
         this(u.id, u.name, u.email, u.password, u.enabled, u.registered, u.roles);
     }
 
-    public User(Integer id, String name, String email, String password, Vote vote, Role... roles) {
+    public User(Integer id, String name, String email, String password, Role... roles) {
         this(id, name, email, password, true, new Date(), Arrays.asList(roles));
     }
 
