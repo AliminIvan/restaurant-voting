@@ -1,6 +1,8 @@
 package ru.javaops.restaurant_voting.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,7 +26,9 @@ public class Dish extends NamedEntity {
     @ManyToOne
     @JoinColumn(name = "menu_id", referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonBackReference
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @JsonIgnore
+//    @JsonBackReference
     private Menu menu;
 
     public Dish(Integer id, String name, BigDecimal price) {

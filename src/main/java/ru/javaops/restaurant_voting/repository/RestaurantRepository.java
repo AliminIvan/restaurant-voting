@@ -15,6 +15,8 @@ public interface RestaurantRepository extends BaseRepository<Restaurant>{
     Restaurant getWithMenus(int id);
 
     @EntityGraph(attributePaths = {"menus"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query("SELECT r FROM Restaurant r LEFT JOIN FETCH Menu m ON r.id = m.restaurant.id WHERE m.lunchDate=?1")
+    @Query("SELECT r FROM Restaurant r LEFT JOIN FETCH Menu m ON r.id = m.restaurant.id " +
+            "WHERE m.lunchDate=?1 " +
+            "ORDER BY r.name, r.address")
     List<Restaurant> getWithMenusByDate(LocalDate ld);
 }

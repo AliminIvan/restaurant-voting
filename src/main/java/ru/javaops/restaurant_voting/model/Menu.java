@@ -3,6 +3,7 @@ package ru.javaops.restaurant_voting.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,7 +27,8 @@ public class Menu extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @JsonIgnore
 //    @JsonBackReference
     private Restaurant restaurant;
 
@@ -36,7 +38,8 @@ public class Menu extends BaseEntity {
 
     @OneToMany(mappedBy = "menu", fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonManagedReference
+//    @JsonIgnore
+//    @JsonManagedReference
     private List<Dish> dishes;
 
     public Menu(Integer id, Restaurant restaurant, List<Dish> dishes) {
