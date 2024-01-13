@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.Range;
 
 import java.math.BigDecimal;
 
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 public class Dish extends NamedEntity {
 
     @Column(name = "price", nullable = false)
+    @Range(min = 0, max = 100000)
     private BigDecimal price;
 
     @ManyToOne

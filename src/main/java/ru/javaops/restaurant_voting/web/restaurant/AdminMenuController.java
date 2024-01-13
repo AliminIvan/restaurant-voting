@@ -1,5 +1,6 @@
 package ru.javaops.restaurant_voting.web.restaurant;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -42,7 +43,7 @@ public class AdminMenuController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Menu> createWithLocation(@RequestBody Menu menu, @RequestParam int restaurantId) {
+    public ResponseEntity<Menu> createWithLocation(@Valid @RequestBody Menu menu, @RequestParam int restaurantId) {
         log.info("create menu {}", menu);
         checkNew(menu);
         Restaurant restaurant = restaurantRepository.getExisted(restaurantId);
@@ -56,7 +57,7 @@ public class AdminMenuController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Menu menu, @PathVariable int id) {
+    public void update(@Valid @RequestBody Menu menu, @PathVariable int id) {
         log.info("update menu {} with id={}", menu, id);
         assureIdConsistent(menu, id);
         Menu menuFromDb = repository.getExisted(id);

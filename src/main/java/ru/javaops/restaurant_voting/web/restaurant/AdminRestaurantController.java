@@ -1,5 +1,6 @@
 package ru.javaops.restaurant_voting.web.restaurant;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -62,7 +63,7 @@ public class AdminRestaurantController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> createWihLocation(@RequestBody Restaurant restaurant) {
+    public ResponseEntity<Restaurant> createWihLocation(@Valid @RequestBody Restaurant restaurant) {
         log.info("create restaurant {}", restaurant);
         checkNew(restaurant);
         Restaurant created = repository.save(restaurant);
@@ -74,7 +75,7 @@ public class AdminRestaurantController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Restaurant restaurant, @PathVariable int id) {
+    public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
         log.info("update restaurant {} with id={}", restaurant, id);
         assureIdConsistent(restaurant, id);
         repository.save(restaurant);

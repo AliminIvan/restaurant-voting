@@ -3,6 +3,7 @@ package ru.javaops.restaurant_voting.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ public class Menu extends BaseEntity {
     private Restaurant restaurant;
 
     @Column(name = "lunch_date", nullable = false)
+    @NotNull(message = "lunchDate must not be null")
     private LocalDate lunchDate = LocalDate.now();
 
     @OneToMany(mappedBy = "menu", fetch = FetchType.EAGER)

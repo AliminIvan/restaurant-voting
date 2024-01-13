@@ -22,22 +22,24 @@ import java.time.LocalTime;
 public class Vote extends BaseEntity {
 
     @Column(name = "vote_date", nullable = false)
-    @NotNull
+    @NotNull(message = "voteDate must not be null")
     private LocalDate voteDate;
 
     @Column(name = "vote_time", nullable = false)
-    @NotNull
+    @NotNull(message = "voteTime must not be null")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     private LocalTime voteTime;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false)
+    @NotNull(message = "user must not be null")
     @JsonIgnore
     private User user;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull(message = "restaurant must not be null")
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
