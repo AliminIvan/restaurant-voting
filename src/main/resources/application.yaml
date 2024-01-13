@@ -15,21 +15,10 @@ spring:
         # https://stackoverflow.com/questions/21257819/what-is-the-difference-between-hibernate-jdbc-fetch-size-and-hibernate-jdbc-batc
         jdbc.batch_size: 20
   datasource:
-    # ImMemory
     url: jdbc:h2:mem:restaurant-voting
-    #    tcp: jdbc:h2:tcp://localhost:9092/mem:restaurant-voting
-    # Absolute path
-    #    url: jdbc:h2:C:/projects/restaurant_voting/db/restaurant_voting
-    #    tcp: jdbc:h2:tcp://localhost:9092/C:/projects/restaurant_voting/db/restaurant_voting
-    # Relative path form current dir
-    #    url: jdbc:h2:./db/restaurant_voting
-    # Relative path from home
-    #    url: jdbc:h2:~/restaurant_voting
-    #    tcp: jdbc:h2:tcp://localhost:9092/~/restaurant_voting
     username: sa
     password:
 
-# Jackson Serialization Issue Resolver
   jackson.visibility:
     field: any
     getter: none
@@ -49,8 +38,8 @@ logging:
 
 server.servlet:
   encoding:
-    charset: UTF-8 # Charset of HTTP requests and responses. Added to the "Content-Type" header if not set explicitly
-    enabled: true # Enable http encoding support
+    charset: UTF-8
+    enabled: true
     force: true
 
 springdoc.swagger-ui.path: /

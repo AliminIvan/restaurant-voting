@@ -1,6 +1,6 @@
 package ru.javaops.restaurant_voting.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,7 +20,7 @@ public class Restaurant extends NamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OnDelete(action = OnDeleteAction.CASCADE)
-//    @JsonManagedReference
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<Menu> menus;
 
     @Column(name = "address", nullable = false)

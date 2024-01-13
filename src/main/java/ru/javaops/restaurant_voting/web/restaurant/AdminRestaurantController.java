@@ -1,4 +1,4 @@
-package ru.javaops.restaurant_voting.web;
+package ru.javaops.restaurant_voting.web.restaurant;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -14,7 +14,8 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
-import static ru.javaops.restaurant_voting.web.RestValidation.*;
+import static ru.javaops.restaurant_voting.web.RestValidation.assureIdConsistent;
+import static ru.javaops.restaurant_voting.web.RestValidation.checkNew;
 
 @RestController
 @RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)

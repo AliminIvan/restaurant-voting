@@ -1,4 +1,4 @@
-package ru.javaops.restaurant_voting.web;
+package ru.javaops.restaurant_voting.web.restaurant;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;

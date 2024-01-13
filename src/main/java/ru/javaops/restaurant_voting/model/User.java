@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.lang.NonNull;
 import ru.javaops.restaurant_voting.HasIdAndEmail;
 import ru.javaops.restaurant_voting.validation.NoHtml;
@@ -47,7 +48,8 @@ public class User extends NamedEntity implements HasIdAndEmail {
     private Date registered = new Date();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    @OrderBy("voteDate DESC")
+    @OrderBy("voteDate, voteTime DESC")
+    @BatchSize(size = 100)
     private List<Vote> votes;
 
     @Enumerated(EnumType.STRING)

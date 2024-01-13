@@ -39,7 +39,10 @@ VALUES ('Салат с овощами', 200, 1),
        ('Том Ям', 330, 5),
        ('Вок терияки с курицей', 300, 5);
 
-INSERT INTO VOTE (restaurant_id, user_id, vote_date)
-VALUES (5, 1, current_date),
-       (4, 2, current_date),
-       (5, 3, current_date);
+INSERT INTO VOTE (restaurant_id, user_id, vote_date, vote_time)
+VALUES (5, 1, current_date, '9:23'),
+       (4, 2, current_date, '10:59'),
+       (5, 3, current_date, '8:41'),
+       (3, 2, '2023-12-31', '10:00'),
+       (2, 1, '2023-12-31', '10:43'),
+       (4, 3, '2023-12-31', '9:34');

@@ -1,4 +1,4 @@
-package ru.javaops.restaurant_voting.web;
+package ru.javaops.restaurant_voting.web.restaurant;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -25,6 +25,7 @@ public class AdminDishController {
     static final String REST_URL = "/api/admin/dishes";
 
     private final DishRepository repository;
+
     private final MenuRepository menuRepository;
 
     public AdminDishController(DishRepository repository, MenuRepository menuRepository) {
