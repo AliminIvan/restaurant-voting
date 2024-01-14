@@ -20,17 +20,17 @@ import static ru.javaops.restaurant_voting.util.DateTimeUtil.DEAD_LINE_TIME;
 import static ru.javaops.restaurant_voting.web.AuthUser.authUser;
 
 @RestController
-@RequestMapping(value = VotingController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = ProfileVotingController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @Transactional(readOnly = true)
-public class VotingController {
+public class ProfileVotingController {
     static final String REST_URL = "/api/voting";
 
     private final VoteRepository repository;
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
 
-    public VotingController(VoteRepository repository, UserRepository userRepository, RestaurantRepository restaurantRepository) {
+    public ProfileVotingController(VoteRepository repository, UserRepository userRepository, RestaurantRepository restaurantRepository) {
         this.repository = repository;
         this.userRepository = userRepository;
         this.restaurantRepository = restaurantRepository;
