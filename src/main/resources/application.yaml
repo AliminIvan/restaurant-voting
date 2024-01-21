@@ -33,7 +33,7 @@ spring:
 logging:
   level:
     root: WARN
-    ru.javaops.restaurant_voting: DEBUG
+    com.javaops.restaurant_voting: DEBUG
     org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
 
 server.servlet:

@@ -20,7 +20,7 @@ Build a voting system for deciding where to have lunch.
 [REST API documentation](http://localhost:8080/)
 Креденшелы:
 ```
-User:  user@yandex.ru / password
+User:  user@yandex.com / password
 Admin: admin@gmail.com / admin
 Guest: guest@gmail.com / guest
 ```
