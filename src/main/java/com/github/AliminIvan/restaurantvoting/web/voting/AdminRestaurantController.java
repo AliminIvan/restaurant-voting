@@ -1,5 +1,9 @@
 package com.github.AliminIvan.restaurantvoting.web.voting;
 
+import com.github.AliminIvan.restaurantvoting.model.Menu;
+import com.github.AliminIvan.restaurantvoting.model.Restaurant;
+import com.github.AliminIvan.restaurantvoting.repository.MenuRepository;
+import com.github.AliminIvan.restaurantvoting.repository.RestaurantRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -8,11 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import com.github.AliminIvan.restaurantvoting.model.Restaurant;
-import com.github.AliminIvan.restaurantvoting.repository.RestaurantRepository;
 
 import java.net.URI;
-import java.time.LocalDate;
 import java.util.List;
 
 import static com.github.AliminIvan.restaurantvoting.web.RestValidation.assureIdConsistent;
@@ -25,48 +26,48 @@ public class AdminRestaurantController {
 
     static final String REST_URL = "/api/admin/restaurants";
 
-    private final RestaurantRepository repository;
+    private final RestaurantRepository restaurantRepository;
 
-    public AdminRestaurantController(RestaurantRepository repository) {
-        this.repository = repository;
+    private final MenuRepository menuRepository;
+
+    public AdminRestaurantController(RestaurantRepository restaurantRepository, MenuRepository menuRepository) {
+        this.restaurantRepository = restaurantRepository;
+        this.menuRepository = menuRepository;
     }
 
     @GetMapping("/{id}")
     public Restaurant get(@PathVariable int id) {
-        log.info("get voting with id: {}", id);
-        return repository.getExisted(id);
+        log.info("get restaurant with id: {}", id);
+        return restaurantRepository.getExisted(id);
     }
 
     @GetMapping("/{id}/with-menu")
-    public ResponseEntity<Restaurant> getWithMenus(@PathVariable int id) {
-        log.info("get voting with id : {} with it`s all menu`s", id);
-        return ResponseEntity.of(repository.getWithMenus(id));
-    }
-
-    @GetMapping("/with-menu-by-date")
-    public List<Restaurant> getWithMenusByDate(@RequestParam LocalDate date) {
-        log.info("get restaurants with lunch date : {} with it`s all menu`s", date);
-        return repository.getWithMenusByDate(date);
+    public Restaurant getWithMenus(@PathVariable int id) {
+        log.info("get restaurant with id : {} with it`s all menu`s", id);
+        List<Menu> menus = menuRepository.getByRestaurantId(id);
+        Restaurant restaurant = restaurantRepository.getExisted(id);
+        restaurant.setMenus(menus);
+        return restaurant;
     }
 
     @GetMapping
     public List<Restaurant> getAll() {
         log.info("get all restaurants");
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "name", "address"));
+        return restaurantRepository.findAll(Sort.by(Sort.Direction.ASC, "name", "address"));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
-        log.info("delete voting with id {}", id);
-        repository.deleteExisted(id);
+        log.info("delete restaurant with id {}", id);
+        restaurantRepository.deleteExisted(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> createWihLocation(@Valid @RequestBody Restaurant restaurant) {
-        log.info("create voting {}", restaurant);
+        log.info("create restaurant {}", restaurant);
         checkNew(restaurant);
-        Restaurant created = repository.save(restaurant);
+        Restaurant created = restaurantRepository.save(restaurant);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -76,9 +77,9 @@ public class AdminRestaurantController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
-        log.info("update voting {} with id={}", restaurant, id);
+        log.info("update restaurant {} with id={}", restaurant, id);
         assureIdConsistent(restaurant, id);
-        repository.save(restaurant);
+        restaurantRepository.save(restaurant);
     }
 
 }

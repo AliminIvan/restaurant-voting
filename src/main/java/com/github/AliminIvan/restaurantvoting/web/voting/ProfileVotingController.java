@@ -63,8 +63,8 @@ public class ProfileVotingController {
         return ResponseEntity.of(voteRepository.getByDate(authUser.id(), date));
     }
 
-    @GetMapping("/menus")
-    public List<Menu> getRestaurantsMenus(@RequestParam LocalDate date) {
+    @GetMapping("/menus-with-restaurants")
+    public List<Menu> getRestaurantsWithMenus(@RequestParam LocalDate date) {
         log.info("get restaurants menu on date {}", date);
         return menuRepository.getAllByLunchDate(date);
     }
@@ -74,12 +74,12 @@ public class ProfileVotingController {
     public ResponseEntity<Vote> createWihLocation(@Valid @RequestBody Vote vote, @AuthenticationPrincipal AuthUser authUser) {
         log.info("create vote {}", vote);
         checkNew(vote);
-            prepareToSave(vote, LocalDateTime.now(), authUser);
-            Vote created = voteRepository.save(vote);
-            URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path(REST_URL + "/{id}")
-                    .buildAndExpand(created.getId()).toUri();
-            return ResponseEntity.created(uriOfNewResource).body(created);
+        prepareToSave(vote, LocalDateTime.now(), authUser);
+        Vote created = voteRepository.save(vote);
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(created.getId()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)

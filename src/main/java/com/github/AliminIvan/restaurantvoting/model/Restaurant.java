@@ -1,6 +1,5 @@
 package com.github.AliminIvan.restaurantvoting.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.github.AliminIvan.restaurantvoting.validation.NoHtml;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -22,7 +21,6 @@ public class Restaurant extends NamedEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-//    @JsonManagedReference
     @ToString.Exclude
     private List<Menu> menus;
 

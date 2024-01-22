@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.validator.constraints.Range;
 
 import java.math.BigDecimal;
 
@@ -22,7 +21,7 @@ public class Dish extends NamedEntity {
     @Min(0)
     private BigDecimal price;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore

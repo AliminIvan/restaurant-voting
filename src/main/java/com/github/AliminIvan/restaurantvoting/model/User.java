@@ -12,7 +12,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.BatchSize;
 import org.springframework.lang.NonNull;
 
 import java.util.*;
@@ -46,11 +45,6 @@ public class User extends NamedEntity implements HasIdAndEmail {
     @NotNull
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Date registered = new Date();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    @OrderBy("voteDate, voteTime DESC")
-    @BatchSize(size = 100)
-    private List<Vote> votes;
 
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_role",

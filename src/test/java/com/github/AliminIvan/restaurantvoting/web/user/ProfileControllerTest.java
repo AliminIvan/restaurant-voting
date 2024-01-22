@@ -2,25 +2,23 @@ package com.github.AliminIvan.restaurantvoting.web.user;
 
 import com.github.AliminIvan.restaurantvoting.model.User;
 import com.github.AliminIvan.restaurantvoting.repository.UserRepository;
+import com.github.AliminIvan.restaurantvoting.to.UserTo;
 import com.github.AliminIvan.restaurantvoting.util.JsonUtil;
 import com.github.AliminIvan.restaurantvoting.util.UsersUtil;
 import com.github.AliminIvan.restaurantvoting.web.AbstractControllerTest;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import com.github.AliminIvan.restaurantvoting.to.UserTo;
 
+import static com.github.AliminIvan.restaurantvoting.web.user.UserTestData.*;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.github.AliminIvan.restaurantvoting.web.user.UserTestData.*;
 
-@Disabled
 class ProfileControllerTest extends AbstractControllerTest {
 
     @Autowired
