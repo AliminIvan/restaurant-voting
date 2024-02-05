@@ -1,5 +1,6 @@
 package com.github.AliminIvan.restaurantvoting.web.voting;
 
+import com.github.AliminIvan.restaurantvoting.error.NotFoundException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ import static com.github.AliminIvan.restaurantvoting.web.RestValidation.checkNew
 @RequestMapping(value = AdminDishController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class AdminDishController {
-    static final String REST_URL = "/api/admin/dishes";
+    static final String REST_URL = "/api/admin/menus/{menuId}/dishes";
 
     private final DishRepository dishRepository;
 
@@ -35,42 +36,46 @@ public class AdminDishController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int id) {
-        log.info("delete dish with id {}", id);
-        dishRepository.deleteExisted(id);
+    public void delete(@PathVariable int menuId, @PathVariable int id) {
+        log.info("delete dish with id {} from menu with id {}", id, menuId);
+        int result = dishRepository.deleteDishByIdAndMenuId(id, menuId);
+        if (result == 0) {
+            throw new NotFoundException("Dish with id " + id + " not found in menu with id " + menuId);
+        }
     }
 
-    @PostMapping(value = "/{menuId}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Dish> createWithLocation(@Valid @RequestBody Dish dish, @PathVariable int menuId) {
-        log.info("create dish {}", dish);
+        log.info("create dish {} for menu with id {}", dish, menuId);
         checkNew(dish);
         Menu menu = menuRepository.getExisted(menuId);
         dish.setMenu(menu);
         Dish created = dishRepository.save(dish);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
-                .buildAndExpand(created.getId()).toUri();
+                .buildAndExpand(menuId, created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody Dish dish, @PathVariable int id) {
-        log.info("update dish {} with id={}", dish, id);
+    public void update(@Valid @RequestBody Dish dish, @PathVariable int menuId, @PathVariable int id) {
+        log.info("update dish {} with id {} in menu with id {}", dish, id, menuId);
         assureIdConsistent(dish, id);
-        Dish dishFromDb = dishRepository.getExisted(id);
-        dish.setMenu(dishFromDb.getMenu());
+        Menu menu = menuRepository.getExisted(menuId);
+        assureIdConsistent(menu, menuId);
+        dish.setMenu(menu);
         dishRepository.save(dish);
     }
 
     @GetMapping("/{id}")
-    public Dish get(@PathVariable int id) {
-        log.info("get dish with id: {}", id);
-        return dishRepository.getExisted(id);
+    public Dish get(@PathVariable int menuId, @PathVariable int id) {
+        log.info("get dish with id {} for menu with id {}", id, menuId);
+        return dishRepository.getDishByIdAndMenuId(id, menuId).orElseThrow();
     }
 
     @GetMapping
-    public List<Dish> getAllByMenu(@RequestParam int menuId) {
+    public List<Dish> getAllByMenu(@PathVariable int menuId) {
         log.info("get all dishes in menu with id: {}", menuId);
         return dishRepository.getAllByMenuId(menuId);
     }

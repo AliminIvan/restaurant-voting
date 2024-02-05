@@ -2,6 +2,8 @@ package com.github.AliminIvan.restaurantvoting.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.github.AliminIvan.restaurantvoting.View;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +21,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
+@JsonView(View.Public.class)
 public class Vote extends BaseEntity {
 
     @Column(name = "vote_date", nullable = false, updatable = false)

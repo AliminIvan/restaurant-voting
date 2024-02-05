@@ -1,8 +1,6 @@
 package com.github.AliminIvan.restaurantvoting.web.voting;
 
-import com.github.AliminIvan.restaurantvoting.model.Menu;
 import com.github.AliminIvan.restaurantvoting.model.Restaurant;
-import com.github.AliminIvan.restaurantvoting.repository.MenuRepository;
 import com.github.AliminIvan.restaurantvoting.repository.RestaurantRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -28,26 +26,14 @@ public class AdminRestaurantController {
 
     private final RestaurantRepository restaurantRepository;
 
-    private final MenuRepository menuRepository;
-
-    public AdminRestaurantController(RestaurantRepository restaurantRepository, MenuRepository menuRepository) {
+    public AdminRestaurantController(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
-        this.menuRepository = menuRepository;
     }
 
     @GetMapping("/{id}")
     public Restaurant get(@PathVariable int id) {
         log.info("get restaurant with id: {}", id);
         return restaurantRepository.getExisted(id);
-    }
-
-    @GetMapping("/{id}/with-menu")
-    public Restaurant getWithMenus(@PathVariable int id) {
-        log.info("get restaurant with id : {} with it`s all menu`s", id);
-        List<Menu> menus = menuRepository.getByRestaurantId(id);
-        Restaurant restaurant = restaurantRepository.getExisted(id);
-        restaurant.setMenus(menus);
-        return restaurant;
     }
 
     @GetMapping

@@ -6,6 +6,7 @@ import com.github.AliminIvan.restaurantvoting.repository.MenuRepository;
 import com.github.AliminIvan.restaurantvoting.repository.RestaurantRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -73,14 +74,22 @@ public class AdminMenuController {
     }
 
     @GetMapping("/by-restaurant")
+    @Cacheable("menus")
     public List<Menu> getAllByRestaurant(@RequestParam int restaurantId) {
         log.info("get menus for restaurant with id: {}", restaurantId);
         return menuRepository.getByRestaurantId(restaurantId);
     }
 
     @GetMapping("/by-date")
+    @Cacheable("menus")
     public List<Menu> getAllByDate(@RequestParam LocalDate date) {
         log.info("get menus on date: {}", date);
         return menuRepository.getAllByLunchDate(date);
+    }
+
+    @GetMapping("/by-restaurant-and-date")
+    public Menu getByRestaurantAndDate(@RequestParam int restaurantId, @RequestParam LocalDate date) {
+        log.info("get menu for restaurant with id {} on date {}", restaurantId, date);
+        return menuRepository.getByRestaurantAndLunchDate(restaurantId, date).orElseThrow();
     }
 }

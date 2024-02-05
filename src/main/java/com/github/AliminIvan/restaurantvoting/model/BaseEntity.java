@@ -1,10 +1,12 @@
 package com.github.AliminIvan.restaurantvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.github.AliminIvan.restaurantvoting.HasId;
+import com.github.AliminIvan.restaurantvoting.View;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.util.ProxyUtils;
-import com.github.AliminIvan.restaurantvoting.HasId;
 
 @MappedSuperclass
 //  https://stackoverflow.com/a/6084701/548473
@@ -18,6 +20,7 @@ public abstract class BaseEntity implements HasId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY) // https://stackoverflow.com/a/28025008/548473
+    @JsonView(View.Public.class)
     protected Integer id;
 
     //    https://stackoverflow.com/questions/1638723
