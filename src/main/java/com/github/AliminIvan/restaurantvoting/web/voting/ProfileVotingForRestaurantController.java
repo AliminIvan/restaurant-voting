@@ -10,7 +10,6 @@ import com.github.AliminIvan.restaurantvoting.repository.MenuRepository;
 import com.github.AliminIvan.restaurantvoting.repository.RestaurantRepository;
 import com.github.AliminIvan.restaurantvoting.repository.VoteRepository;
 import com.github.AliminIvan.restaurantvoting.web.AuthUser;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
@@ -30,7 +29,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.github.AliminIvan.restaurantvoting.util.DateTimeUtil.DEAD_LINE_TIME;
-import static com.github.AliminIvan.restaurantvoting.web.RestValidation.checkNew;
 
 @RestController
 @RequestMapping(value = ProfileVotingForRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -72,7 +70,7 @@ public class ProfileVotingForRestaurantController {
         return ResponseEntity.of(voteRepository.getByDate(authUser.id(), date));
     }
 
-    @GetMapping("/{id}/with-menu")
+    @GetMapping("/{id}/restaurant-with-menu")
     public Restaurant getRestaurantWithMenus(@PathVariable int id) {
         log.info("get restaurant with id : {} with it`s all menu`s", id);
         Optional<Menu> menu = menuRepository.getByRestaurantAndLunchDate(id, LocalDate.now());
@@ -95,10 +93,10 @@ public class ProfileVotingForRestaurantController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
-    public ResponseEntity<Vote> createWihLocation(@Valid @RequestBody Vote vote, @AuthenticationPrincipal AuthUser authUser) {
-        log.info("create vote {}", vote);
-        checkNew(vote);
-        prepareToSave(vote, LocalDateTime.now(), authUser);
+    public ResponseEntity<Vote> createWihLocation(@RequestBody Integer restaurantId, @AuthenticationPrincipal AuthUser authUser) {
+        log.info("create vote for restaurant with id {}", restaurantId);
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        Vote vote = prepareToSave(restaurantId, authUser, currentDateTime);
         Vote created = voteRepository.save(vote);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
@@ -109,25 +107,25 @@ public class ProfileVotingForRestaurantController {
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
-    public void update(@Valid @RequestBody Vote vote, @AuthenticationPrincipal AuthUser authUser) {
+    public void update(@RequestBody Integer restaurantId, @AuthenticationPrincipal AuthUser authUser) {
         log.info("update vote");
         LocalDateTime currentDateTime = LocalDateTime.now();
-        Integer voteId = voteRepository.getByDate(authUser.id(), currentDateTime.toLocalDate()).orElseThrow().getId();
-        vote.setId(voteId);
         if (currentDateTime.toLocalTime().isBefore(DEAD_LINE_TIME)) {
-            prepareToSave(vote, currentDateTime, authUser);
+            Vote vote = prepareToSave(restaurantId, authUser, currentDateTime);
+            Integer voteIdFromDb = voteRepository.getByDate(authUser.id(), currentDateTime.toLocalDate()).orElseThrow().getId();
+            vote.setId(voteIdFromDb);
             voteRepository.save(vote);
         } else {
             throw new DataConflictException(String.format("User can`t change vote after %s o`clock", DEAD_LINE_TIME));
         }
     }
 
-    private void prepareToSave(Vote vote, LocalDateTime currentDateTime, AuthUser authUser) {
-        vote.setVoteDate(currentDateTime.toLocalDate());
-        vote.setVoteTime(currentDateTime.toLocalTime());
-        String name = vote.getRestaurant().getName();
-        String address = vote.getRestaurant().getAddress();
-        vote.setRestaurant(restaurantRepository.getByNameAndAddress(name, address).orElseThrow());
-        vote.setUser(authUser.getUser());
+    private Vote prepareToSave(Integer restaurantId, AuthUser authUser, LocalDateTime currentDateTime) {
+        return new Vote(
+                currentDateTime.toLocalDate(),
+                currentDateTime.toLocalTime(),
+                authUser.getUser(),
+                restaurantRepository.getExisted(restaurantId)
+        );
     }
 }
