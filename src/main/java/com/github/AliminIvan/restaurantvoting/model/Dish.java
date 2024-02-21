@@ -31,4 +31,8 @@ public class Dish extends NamedEntity {
         super(id, name);
         this.price = price;
     }
+
+    public Dish(Dish dish) {
+        this(dish.id, dish.name, dish.price);
+    }
 }

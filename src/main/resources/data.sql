@@ -20,7 +20,8 @@ VALUES (current_date, 1),
        (current_date, 2),
        (current_date, 3),
        (current_date, 4),
-       (current_date, 5);
+       (current_date, 5),
+       ('2023-12-31', 2);
 
 INSERT INTO DISH (name, price, menu_id)
 VALUES ('Салат с овощами', 200, 1),

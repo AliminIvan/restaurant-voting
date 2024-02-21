@@ -71,7 +71,8 @@ public class AdminDishController {
     @GetMapping("/{id}")
     public Dish get(@PathVariable int menuId, @PathVariable int id) {
         log.info("get dish with id {} for menu with id {}", id, menuId);
-        return dishRepository.getDishByIdAndMenuId(id, menuId).orElseThrow();
+        return dishRepository.getDishByIdAndMenuId(id, menuId).orElseThrow(
+                () -> new NotFoundException("Dish with id " + id + " not found in menu with id " + menuId));
     }
 
     @GetMapping

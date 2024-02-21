@@ -1,8 +1,7 @@
 package com.github.AliminIvan.restaurantvoting.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -24,8 +23,7 @@ public class Menu extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    @JsonBackReference
+    @JsonIgnore
     private Restaurant restaurant;
 
     @Column(name = "lunch_date", nullable = false)
@@ -41,6 +39,11 @@ public class Menu extends BaseEntity {
     public Menu(Integer id, Restaurant restaurant, List<Dish> dishes) {
         super(id);
         this.restaurant = restaurant;
+        this.dishes = dishes;
+    }
+
+    public Menu(Integer id, List<Dish> dishes) {
+        super(id);
         this.dishes = dishes;
     }
 }

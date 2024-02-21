@@ -4,7 +4,6 @@ import com.github.AliminIvan.restaurantvoting.model.Menu;
 import com.github.AliminIvan.restaurantvoting.model.Restaurant;
 import com.github.AliminIvan.restaurantvoting.repository.MenuRepository;
 import com.github.AliminIvan.restaurantvoting.repository.RestaurantRepository;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static com.github.AliminIvan.restaurantvoting.web.RestValidation.assureIdConsistent;
-import static com.github.AliminIvan.restaurantvoting.web.RestValidation.checkNew;
 
 @RestController
 @RequestMapping(value = AdminMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -44,11 +42,10 @@ public class AdminMenuController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Menu> createWithLocation(@Valid @RequestBody Menu menu) {
-        log.info("create menu {}", menu);
-        checkNew(menu);
-        Restaurant restaurant = restaurantRepository.getByNameAndAddress(menu.getRestaurant().getName(),
-                menu.getRestaurant().getAddress()).orElseThrow();
+    public ResponseEntity<Menu> createWithLocation(@RequestBody Integer restaurantId) {
+        log.info("create menu for restaurant with id {}", restaurantId);
+        Restaurant restaurant = restaurantRepository.getExisted(restaurantId);
+        Menu menu = new Menu(null, null, List.of());
         menu.setRestaurant(restaurant);
         Menu created = menuRepository.save(menu);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -59,11 +56,13 @@ public class AdminMenuController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody Menu menu, @PathVariable int id) {
-        log.info("update menu {} with id={}", menu, id);
-        assureIdConsistent(menu, id);
+    public void update(@RequestBody LocalDate lunchDate, @PathVariable int id) {
+        log.info("update menu with id={}", id);
         Menu menuFromDb = menuRepository.getExisted(id);
+        Menu menu = new Menu(null, null, null);
+        menu.setLunchDate(lunchDate);
         menu.setRestaurant(menuFromDb.getRestaurant());
+        assureIdConsistent(menu, id);
         menuRepository.save(menu);
     }
 
