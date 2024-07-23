@@ -1,8 +1,8 @@
 ### Voting system for restaurants REST API (without frontend)
 
-**Technical task:**
+**Description:**
 
-Build a voting system for deciding where to have lunch.
+Voting system for deciding where to have lunch.
 
 - 2 types of users: admin and regular users
 - Admin can input a restaurant and it's lunch menu of the day (2-5 items usually, just a dish name and price)
@@ -18,7 +18,7 @@ Build a voting system for deciding where to have lunch.
 - Run: `mvn spring-boot:run` in root directory.
 -----------------------------------------------------
 [REST API documentation](http://localhost:8080/)
-Креденшелы:
+Credentials:
 ```
 User:  user@yandex.com / password
 Admin: admin@gmail.com / admin
